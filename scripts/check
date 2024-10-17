@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set +e
+script_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+
+cd "$script_dir" || exit 1
+
+exit_code=0
+
+./check-format || exit_code=1
+./check-modules || exit_code=1
+
+exit $exit_code

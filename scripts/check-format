@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+script_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+
+cd "$script_dir/.."
+
+output=$(gofumpt -e -l . | sed 's/^/[check format failed] /')
+if [[ -n "$output" ]]
+then
+    >&2 echo "$output"
+    exit 1
+fi
+
+>&2 echo "[check format succeeded]"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+script_dir=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+
+cd "$script_dir/.."
+
+if ! git diff --quiet go.sum
+then
+    >&2 echo "[check modules failed] go.sum has uncommitted changes"
+    exit 1
+fi
+
+go mod tidy
+
+output=$(git diff go.sum | sed 's/^/[check module failed] /')
+if [[ -n "$output" ]]
+then
+    git checkout go.sum &> /dev/null
+    >&2 echo "$output"
+    exit 1
+fi
+
+>&2 echo "[check modules succeeded]"

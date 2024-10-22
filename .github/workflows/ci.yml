@@ -10,7 +10,7 @@ defaults:
     shell: bash -exuo pipefail {0}
 
 jobs:
-  pre-build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,11 +22,11 @@ jobs:
           go-version-file: go.mod
           cache-dependency-path: go.sum
 
+      - name: Build
+        run: make test
+
       - name: Check
         run: make check
 
       - name: Test
-        run: make test
-
-      - name: Build
         run: make test
